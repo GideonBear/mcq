@@ -19,8 +19,8 @@ def parse_args() -> Tuple[str, str]:
     }
     source_options_list = tuple(source_options.keys()) + tuple(source_options.values())
 
-    parser.add_argument('source', options=source_options_list)
-    parser.add_argument('url_or_path')
+    parser.add_argument('source_type', options=source_options_list)
+    parser.add_argument('value')
 
     args = parser.parse_args()
-    return args.source, source_options.get(args.url_or_path, args.url_or_path)
+    return args.source_type, source_options.get(args.value, args.value)
