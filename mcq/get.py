@@ -1,5 +1,6 @@
-from pathlib import Path
+import shutil
 from shutil import copytree, unpack_archive
+from pathlib import Path
 
 from .default import default_urls
 from .download import download
@@ -37,7 +38,7 @@ def from_default(version: str, dest: Path):
 def from_url(url: str, dest: Path):
     destzip = dest.with_suffix(ZIP_SUFFIX)
     if destzip.exists():
-        fatal(f'{destzip} exists')
+        fatal(f'Path "{destzip}" exists')
 
     download(url, destzip)
     from_zip(destzip, dest)
@@ -47,15 +48,19 @@ def from_url(url: str, dest: Path):
 def from_dir(path, dest: Path):
     directory = Path(path).resolve()
     if not directory.is_dir():
-        fatal(f'Path {path} does not exist or is not a directory')
+        fatal(f'Path "{path}" does not exist or is not a directory')
     copytree(directory, dest)
 
 
 def from_zip(path, dest: Path):
     zip_file = Path(path).resolve()
     if not zip_file.is_file():
-        fatal(f'Path {path} does not exist or is a directory')
-    unpack_archive(path, dest)
+        fatal(f'Path "{path}" does not exist or is a directory')
+    try:
+        unpack_archive(path, dest)
+    except shutil.ReadError as err:
+        fatal(f'Error while unpacking archive: {err}')
+    # todo: check for error
 
 
 source_types = {
