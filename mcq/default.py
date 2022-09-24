@@ -19,3 +19,4 @@ t_versions.update(t_other)
 t_urls = get_urls(t_versions, t_url)
 
 default_urls = {**t_urls, **vd_urls}
+default_urls = {f'1.{k}': v for k, v in default_urls.items()}

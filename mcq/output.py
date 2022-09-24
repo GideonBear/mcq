@@ -3,7 +3,7 @@ import sys
 from rich.console import Console as _Console
 
 
-FATAL = 'red'
+FATAL = 'bright_red'
 
 console = _Console()
 
