@@ -1,9 +1,8 @@
-import shutil
 from base64 import urlsafe_b64decode, urlsafe_b64encode
+from contextlib import contextmanager
 from pathlib import Path
 
 from .output import fatal
-
 
 cache = Path('cache')
 if cache.is_file():
@@ -19,11 +18,14 @@ def decode(data: str) -> str:
     return str(urlsafe_b64decode(data))
 
 
-def download(url: str, dest: Path):
+@contextmanager
+def download(url: str) -> Path:
     file = cache / encode(url)
-    if file.exists():
-        shutil.copy(file, dest)
-        return
+    if not file.exists():
+        _download(url, file)
+    yield file
+    # don't delete it as it's in the cache, not a temporary file
 
 
+def _download(url, dest):
     raise NotImplementedError

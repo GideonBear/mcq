@@ -36,13 +36,8 @@ def from_default(version: str, dest: Path):
 
 
 def from_url(url: str, dest: Path):
-    destzip = dest.with_suffix(ZIP_SUFFIX)
-    if destzip.exists():
-        fatal(f'Path "{destzip}" exists')
-
-    download(url, destzip)
-    from_zip(destzip, dest)
-    destzip.unlink()
+    with download(url) as file:
+        from_zip(file, dest)
 
 
 def from_dir(path, dest: Path):
@@ -60,7 +55,6 @@ def from_zip(path, dest: Path):
         unpack_archive(path, dest)
     except shutil.ReadError as err:
         fatal(f'Error while unpacking archive: {err}')
-    # todo: check for error
 
 
 source_types = {
