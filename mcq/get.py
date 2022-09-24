@@ -18,7 +18,7 @@ def remove_prefix(text: str, prefix: str) -> str:
 
 def get(source_type, source_value, dest: Path):
     if dest.exists():
-        fatal(f'{dest} exists, remove or move it before running')
+        fatal(f'"{dest}" exists, remove or move it before running')
 
     assert source_type in source_types
     func = source_types[source_type]
@@ -60,6 +60,6 @@ def from_zip(path, dest: Path):
 source_types = {
     'default': from_default,
     'url': from_url,
-    'dir': from_dir,
+    'path': from_dir,
     'zip': from_zip
 }

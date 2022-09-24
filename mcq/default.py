@@ -4,8 +4,10 @@ def get_urls(versions, url):
 
 vd_url = 'https://www.curseforge.com/minecraft/texture-packs/vanilladefault/download/{}/file'
 vd_files = {
-    #  todo
+    '19.0': 3820777
+    # Consumer says he needs nothing mre
 }
+vd_files = {k: str(v) for k, v in vd_files.items()}
 vd_urls = get_urls(vd_files, vd_url)
 
 t_url = 'https://texture-packs.com/default-texture-pack-1-{}-download/'

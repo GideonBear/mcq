@@ -14,10 +14,6 @@ def encode(data: str) -> str:
     return str(urlsafe_b64encode(data.encode()))
 
 
-def decode(data: str) -> str:
-    return str(urlsafe_b64decode(data))
-
-
 @contextmanager
 def download(url: str) -> Path:
     file = cache / encode(url)

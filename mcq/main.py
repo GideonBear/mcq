@@ -26,6 +26,5 @@ def parse_args():
     parser.add_argument('--only-textures', action='store_true')
     parser.add_argument('--zip', action='store_true', default=True)
     parser.add_argument('--no-zip', destination='zip', action='store_false')
-    # todo: --zip and --no-zip (zip being the default)
 
     return parser.parse_args()
