@@ -16,6 +16,10 @@ def remove_prefix(text: str, prefix: str) -> str:
     return text
 
 
+def compare_version(version: str) -> float:
+    return float(remove_prefix(version, '1.'))
+
+
 def get(source_type, source_value, dest: Path):
     if dest.exists():
         fatal(f'"{dest}" exists, remove or move it before running')
@@ -28,7 +32,7 @@ def get(source_type, source_value, dest: Path):
 
 def from_default(version: str, dest: Path):
     if version not in default_urls:
-        versions = '\n'.join(sorted(default_urls.keys(), key=lambda x: int(remove_prefix(x, '1.')), reverse=True))
+        versions = '\n'.join(sorted(default_urls.keys(), key=compare_version, reverse=True))
         fatal(f'Unsupported version, available versions are:\n\n{versions}')
 
     url = default_urls[version]

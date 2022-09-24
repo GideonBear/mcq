@@ -2,7 +2,7 @@ from base64 import urlsafe_b64decode, urlsafe_b64encode
 from contextlib import contextmanager
 from pathlib import Path
 
-from .output import fatal
+from .output import fatal, log
 
 cache = Path('cache')
 if cache.is_file():
@@ -18,6 +18,8 @@ def encode(data: str) -> str:
 def download(url: str) -> Path:
     file = cache / encode(url)
     if not file.exists():
+        print('File not cached, downloading...')
+        log(f'File: {file.name}')
         _download(url, file)
     yield file
     # don't delete it as it's in the cache, not a temporary file
