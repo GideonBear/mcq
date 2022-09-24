@@ -53,8 +53,8 @@ def from_dir(path, dest: Path):
 
 def from_zip(path, dest: Path):
     zip_file = Path(path).resolve()
-    if not zip_file.is_file() or zip_file.suffix != ZIP_SUFFIX:
-        fatal(f'Path {path} does not exist, is a directory or is not a zip file')
+    if not zip_file.is_file():
+        fatal(f'Path {path} does not exist or is a directory')
     unpack_archive(path, dest)
 
 

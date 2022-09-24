@@ -13,7 +13,7 @@ def main():
     print(args)
     get(args.source_type, args.source_value, curr)
     process(curr, args.process_type, args.process_value)
-    post_process(curr, only_textures=args.only_textures)
+    post_process(curr, args.only_textures)
     raise NotImplementedError
 
 
@@ -25,5 +25,6 @@ def parse_args():
     parser.add_argument('process_type', choices=process_types.keys())
     parser.add_argument('process_value')
     parser.add_argument('--only-textures', action='store_true')
+    # todo: --zip and --no-zip (zip being the default)
 
     return parser.parse_args()
