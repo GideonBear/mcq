@@ -19,8 +19,8 @@ def get(source_type, source_value, dest: Path):
     if dest.exists():
         fatal(f'{dest} exists, remove or move it before running')
 
-    assert source_type in source_map
-    func = source_map[source_type]
+    assert source_type in source_types
+    func = source_types[source_type]
 
     func(source_value, dest)
 
@@ -58,7 +58,7 @@ def from_zip(path, dest: Path):
     unpack_archive(path, dest)
 
 
-source_map = {
+source_types = {
     'default': from_default,
     'url': from_url,
     'dir': from_dir,
