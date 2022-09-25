@@ -18,7 +18,7 @@ if cache.is_file():
 cache.mkdir(exist_ok=True)
 
 columns = (
-    TextColumn("[progress.description]{task.description}"),
+    TextColumn("[bold blue]{task.fields[file]}", justify="right"),
     BarColumn(),
     DownloadColumn(),
     TransferSpeedColumn(),
@@ -49,8 +49,8 @@ def download(url: str) -> Path:
 
 def _download(url, dest):
     log(f'Downloading {url} to {dest}')
-    task_id = progress.add_task("download", filename=dest, start=False)
-    with contextlib.closing(urlopen(url)) as response:
+    task_id = progress.add_task("download", file=url.split('/')[-1], start=False)
+    with contextlib.closing(urlopen(url)) as response, progress:
         # This will break if the response doesn't contain content length
         total = int(response.info()["Content-length"])
         progress.update(task_id, total=total)
