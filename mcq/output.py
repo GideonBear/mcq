@@ -12,16 +12,14 @@ def fatal(msg):
     sys.exit(1)
 
 
+verbose: bool = False
+
+
 def set_verbose(val: bool):
-    if val:
-        global log
-        log = _log
+    global verbose
+    verbose = val
 
 
-_log = console.print
-
-
-def _dummy(msg): pass
-
-
-log = _dummy
+def log(msg):
+    if verbose:
+        console.print(msg)

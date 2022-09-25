@@ -9,6 +9,8 @@ vd_files = {
 }
 vd_files = {k: str(v) for k, v in vd_files.items()}
 vd_urls = get_urls(vd_files, vd_url)
+# 403 error, this should work
+vd_urls = {'19.0': 'https://mediafiles.forgecdn.net/files/3820/777/VanillaDefault+1.19.zip'}
 
 t_url = 'https://texture-packs.com/default-texture-pack-1-{}-download/'
 t_supported = '17 16 15 14 13 12 10 8'.split(' ')

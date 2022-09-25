@@ -48,6 +48,7 @@ def from_dir(path, dest: Path):
     directory = Path(path).resolve()
     if not directory.is_dir():
         fatal(f'Path "{path}" does not exist or is not a directory')
+    print('Copying...')
     copytree(directory, dest)
 
 
@@ -56,6 +57,7 @@ def from_zip(path, dest: Path):
     if not zip_file.is_file():
         fatal(f'Path "{path}" does not exist or is a directory')
     try:
+        print('Unpacking...')
         unpack_archive(path, dest)
     except shutil.ReadError as err:
         fatal(f'Error while unpacking archive: {err}')

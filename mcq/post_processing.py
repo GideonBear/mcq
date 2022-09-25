@@ -6,14 +6,14 @@ from .processing import process
 TEXTURES_PATH = 'assets/minecraft/textures'
 
 
-def post_process(path: Path, only_textures: bool, zip_: bool):
-    if only_textures:
-        do_only_textures(path)
+def post_process(path: Path, export_only_textures: bool, zip_: bool):
+    if export_only_textures:
+        do_export_only_textures(path)
     if zip_:
         do_zip(path)
 
 
-def do_only_textures(path: Path):
+def do_export_only_textures(path: Path):
     textures = path / TEXTURES_PATH
     process(path, 'delete', None, [], [textures, 'pack.mcmeta', 'pack.png'])
 

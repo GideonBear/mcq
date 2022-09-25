@@ -37,7 +37,7 @@ def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], 
         if (whitelist and p not in lst) or (p in lst):
             log(f'Skipping {p}')
         elif p.is_dir():
-            process_rec(path, func, value, whitelist, lst, do_dirs = do_dirs)
+            process_rec(p, func, value, whitelist, lst, do_dirs=do_dirs)
             if do_dirs:
                 func(p, value)
         else:
@@ -45,10 +45,20 @@ def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], 
 
 
 def resize_div(path: Path, value: int):
+    if path.suffix != '.png':
+        return
     with Image.open(str(path)) as image:
         width, height = map(div_helper(value), (image.width, image.height))
         image = image.resize((width, height))
         image.save(path)
+
+
+def div_helper(value):
+    def div_helper_closure(old):
+        new = old // value
+        return 1 if new == 0 else new
+
+    return div_helper_closure
 
 
 def delete(path: Path, _: int):
@@ -60,13 +70,6 @@ def delete(path: Path, _: int):
             pass
     else:
         path.unlink()
-
-
-def div_helper(value):
-    def div_helper_closure(old):
-        new = old // 2
-        return 1 if new == 0 else new
-    return div_helper_closure
 
 
 process_types = {

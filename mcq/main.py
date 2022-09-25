@@ -19,10 +19,10 @@ def main():
     get(args.source_type, args.source_value, curr)
     print('Collected resource pack')
     print('Processing resource pack...')
-    process(curr, args.process_type, args.process_value, args.whitelist, args.blacklist)
+    process(curr, args.process_type, args.process_value, args.whitelist or [], args.blacklist or [])
     print('Processed resource pack')
     print('Post-processing resource pack...')
-    post_process(curr, args.only_textures, args.zip)
+    post_process(curr, args.export_only_textures, args.zip)
     print('Done')
 
 
@@ -39,7 +39,8 @@ def parse_args():
     lists.add_argument('-w', '--whitelist', type=parse_list, help='Only perform the process on these folders')
     lists.add_argument(
         '-n', '--normal',
-        dest='whitelist', value=NORMAL_VALUE,
+        action='store_const',
+        dest='whitelist', const=NORMAL_VALUE,
         help=f'Only preform the process on the "normal" folders, use the whitelist {NORMAL_VALUE}'
     )
 
