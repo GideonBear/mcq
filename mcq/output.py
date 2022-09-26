@@ -1,4 +1,5 @@
 import sys
+from pprint import pprint
 
 from rich.console import Console as _Console
 
@@ -13,6 +14,7 @@ def fatal(msg):
 
 
 verbose: bool = False
+debug_val: bool = False
 
 
 def set_verbose(val: bool):
@@ -20,6 +22,16 @@ def set_verbose(val: bool):
     verbose = val
 
 
+def set_debug(val: bool):
+    global debug_val
+    debug_val = val
+
+
 def log(msg):
     if verbose:
         console.print(msg)
+
+
+def debug(msg):
+    if debug_val:
+        pprint(msg)

@@ -52,6 +52,11 @@ def parse_args():
     parser.add_argument('-z', '--zip', action='store_true', help='Zip after processing')
 
     parser.add_argument('-v', '--verbose', action='store_true', help='Put more useless stuff on the screen')
+    parser.add_argument(
+        '-d', '--debug',
+        action='store_true',
+        help='Put even more really useless spammy stuff on the screen'
+    )
 
     return parser.parse_args()
 

@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from PIL import Image
 
-from .output import log, fatal
+from .output import log, fatal, debug
 
 
 def process(
@@ -38,7 +38,7 @@ def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) ->
         [lst.extend(p.parents[:-1]) for p in lst.copy()]
 
     lst = list(map(lambda x: (path / x).resolve(), lst))
-
+    debug(lst)
     return use_whitelist, lst
 
 
