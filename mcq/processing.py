@@ -32,12 +32,12 @@ def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) ->
     assert not (whitelist and blacklist)
     use_whitelist = bool(whitelist)
     lst = whitelist or blacklist
-    lst = list(map(lambda x: path / Path(x), lst))
+    lst = list(map(Path, lst))
 
     if use_whitelist:
-        [lst.extend(p.parents[:-1]) for p in lst]
+        [lst.extend(p.parents[:-1]) for p in lst.copy()]
 
-    lst = list(map(lambda x: x.resolve(), lst))
+    lst = list(map(lambda x: (path / x).resolve(), lst))
 
     return use_whitelist, lst
 
