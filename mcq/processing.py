@@ -60,7 +60,12 @@ def skip(path: Path, whitelist: bool, lst: List[Path]):
     debug(f'`skip` called with {whitelist=}, {path=}')
 
     if whitelist:
-        return path not in lst
+        if path in lst:
+            return False
+        for p in path.parents:
+            if p in lst:
+                return False
+        return True
     else:
         return path in lst
 
