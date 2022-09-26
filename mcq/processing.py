@@ -1,6 +1,6 @@
 from os import PathLike
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from PIL import Image
 
@@ -28,7 +28,7 @@ def process(
     process_rec(path, func, process_value, whitelist, lst, do_dirs)
 
 
-def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) -> List[Path]:
+def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) -> Tuple[bool, List[Path]]:
     assert not (whitelist and blacklist)
     use_whitelist = bool(whitelist)
     lst = whitelist or blacklist
@@ -38,6 +38,7 @@ def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) ->
         [lst.extend(p.parents[:-1]) for p in lst.copy()]
 
     lst = list(map(lambda x: (path / x).resolve(), lst))
+
     debug(lst)
     return use_whitelist, lst
 
@@ -56,6 +57,8 @@ def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], 
 
 def skip(path: Path, whitelist: bool, lst: List[Path]):
     assert path == path.resolve()
+    debug(f'`skip` called with {whitelist=}')
+
     if whitelist:
         return path not in lst
     else:
