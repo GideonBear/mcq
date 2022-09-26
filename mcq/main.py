@@ -27,7 +27,7 @@ def main():
 
 
 def parse_args():
-    parser = ArgumentParser()
+    parser = ArgumentParser('mcq')
 
     parser.add_argument('source_type', choices=source_types.keys(), help='Where to get the resource pack from')
     parser.add_argument('source_value', help='The url, path, version, etc')
