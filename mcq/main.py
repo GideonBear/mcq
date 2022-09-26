@@ -57,4 +57,4 @@ def parse_args():
 
 
 def parse_list(s: str):
-    return [int(item) for item in s.split(',')]
+    return [item for item in s.split(',')]
