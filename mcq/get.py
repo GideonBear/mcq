@@ -66,6 +66,6 @@ def from_zip(path, dest: Path):
 source_types = {
     'default': from_default,
     'url': from_url,
-    'path': from_dir,
+    'dir': from_dir,
     'zip': from_zip
 }
