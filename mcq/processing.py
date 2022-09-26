@@ -57,7 +57,7 @@ def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], 
 
 def skip(path: Path, whitelist: bool, lst: List[Path]):
     assert path == path.resolve()
-    debug(f'`skip` called with {whitelist=}')
+    debug(f'`skip` called with {whitelist=}, {path=}')
 
     if whitelist:
         return path not in lst
