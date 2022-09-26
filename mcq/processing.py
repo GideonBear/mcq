@@ -5,6 +5,7 @@ from typing import List, Optional, Tuple
 from PIL import Image
 
 from .output import log, fatal, debug
+from .pathlist import create_pathlist
 
 
 def process(
@@ -16,7 +17,7 @@ def process(
 ):
     path = path.resolve()
 
-    whitelist, lst = get_lst(path, whitelist, blacklist)
+    whitelist, lst = create_pathlist(whitelist, blacklist)
 
     assert process_type in process_type
     func, need_value, do_dirs = process_types[process_type]
@@ -29,10 +30,6 @@ def process(
 
 
 def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) -> Tuple[bool, List[Path]]:
-    assert not (whitelist and blacklist)
-    use_whitelist = bool(whitelist)
-    lst = whitelist or blacklist
-    lst = list(map(Path, lst))
 
     if use_whitelist:
         [lst.extend(p.parents[:-1]) for p in lst.copy()]
@@ -60,14 +57,10 @@ def skip(path: Path, whitelist: bool, lst: List[Path]):
     debug(f'`skip` called with {whitelist=}, {path=}')
 
     if whitelist:
-        if path in lst:
-            return False
         for p in path.parents:
             if p in lst:
                 return False
         return True
-    else:
-        return path in lst
 
 
 def resize_div(path: Path, value: int):
