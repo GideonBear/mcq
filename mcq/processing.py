@@ -16,11 +16,7 @@ def process(
 ):
     path = path.resolve()
 
-    assert not (whitelist and blacklist)
-    use_whitelist = bool(whitelist)
-    lst = whitelist or blacklist
-    whitelist = use_whitelist
-    lst = list(map(lambda x: Path(x).resolve(), lst))
+    whitelist, lst = get_lst(path, whitelist, blacklist)
 
     assert process_type in process_type
     func, need_value, do_dirs = process_types[process_type]
@@ -32,9 +28,23 @@ def process(
     process_rec(path, func, process_value, whitelist, lst, do_dirs)
 
 
+def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) -> List[Path]:
+    assert not (whitelist and blacklist)
+    use_whitelist = bool(whitelist)
+    lst = whitelist or blacklist
+    lst = list(map(lambda x: path / Path(x), lst))
+
+    if use_whitelist:
+        [lst.extend(p.parents[:-1]) for p in lst]
+
+    lst = list(map(lambda x: x.resolve(), lst))
+
+    return use_whitelist, lst
+
+
 def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], do_dirs: bool):
     for p in path.iterdir():
-        if (whitelist and p not in lst) or (p in lst):
+        if skip(p, whitelist, lst):
             log(f'Skipping {p}')
         elif p.is_dir():
             process_rec(p, func, value, whitelist, lst, do_dirs=do_dirs)
@@ -42,6 +52,14 @@ def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], 
                 func(p, value)
         else:
             func(p, value)
+
+
+def skip(path: Path, whitelist: bool, lst: List[Path]):
+    assert path == path.resolve()
+    if whitelist:
+        return path not in lst
+    else:
+        return path in lst
 
 
 def resize_div(path: Path, value: int):
