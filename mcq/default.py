@@ -21,6 +21,9 @@ t_other = {
 t_versions = dict(zip(t_supported, t_supported))
 t_versions.update(t_other)
 t_urls = get_urls(t_versions, t_url)
+t_urls = {
+    '1.8': 'https://texture-packs.com/wp-content/uploads/2020/11/Default-Texture-Pack-1.8.x.zip'
+}
 
 default_urls = {**t_urls, **vd_urls}
 default_urls = {f'1.{k}': v for k, v in default_urls.items()}
