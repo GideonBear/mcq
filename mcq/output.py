@@ -1,5 +1,6 @@
 import sys
 from pprint import pprint
+from typing import Any, Union
 
 from rich.console import Console as _Console
 
@@ -29,9 +30,15 @@ def set_debug(val: bool):
 
 def log(msg):
     if verbose:
-        console.print(msg)
+        print(msg)
 
 
-def debug(msg):
+def debug(val_msg: Union[str, Any] = 'temporary debug message', val: Any = None):
     if debug_val:
-        pprint(msg)
+        if val:
+            print(val_msg, end='')
+            pprint(val)
+        elif isinstance(val_msg, str):
+            print(val_msg)
+        else:
+            pprint(val_msg)

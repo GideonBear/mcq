@@ -14,9 +14,8 @@ def post_process(path: Path, export_only_textures: bool, zip_: bool):
 
 
 def do_export_only_textures(path: Path):
-    textures = path / TEXTURES_PATH
     print('Deleting with blacklist...')
-    process(path, 'delete', None, [], [textures, 'pack.mcmeta', 'pack.png'])
+    process(path, 'delete', None, [], [TEXTURES_PATH, 'pack.mcmeta', 'pack.png'])
 
 
 def do_zip(path: Path):

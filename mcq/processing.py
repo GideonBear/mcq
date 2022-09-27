@@ -26,20 +26,21 @@ def process(
     elif (not need_value) and process_value is not None:
         fatal('Specified process_value is not accepted for this process')
 
-    process_rec(path, func, process_value, lst, do_dirs, False)
+    process_rec(path, path, func, process_value, lst, do_dirs, False)
 
 
-def process_rec(path: Path, func, value: int, lst: PathList, do_dirs: bool, whitelisted: bool):
+def process_rec(curr, path: Path, func, value: int, lst: PathList, do_dirs: bool, whitelisted: bool):
     for p in path.iterdir():
-        if lst.skip(p, whitelisted):
-            log(f'Skipping {p}')
+        rel_p = p.relative_to(curr)
+        if lst.skip(rel_p, whitelisted, p.is_dir()):
+            log(f'Skipping {rel_p}')
             continue
         elif p.is_dir():
-            process_rec(p, func, value, lst, do_dirs, True)
+            process_rec(curr, p, func, value, lst, do_dirs, True)
             if do_dirs:
                 func(p, value)
         else:
-            func(path / p, value)
+            func(p, value)
 
 
 def resize_div(path: Path, value: int):

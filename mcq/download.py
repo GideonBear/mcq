@@ -4,7 +4,7 @@ from base64 import urlsafe_b64encode
 from contextlib import contextmanager
 from functools import partial
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.request import urlopen, build_opener, install_opener
 
 from rich.progress import TimeRemainingColumn, TextColumn, TransferSpeedColumn, DownloadColumn, BarColumn, Progress
 
@@ -26,6 +26,15 @@ columns = (
     TimeRemainingColumn(),
 )
 progress = Progress(*columns, console=console, refresh_per_second=PROGRESS_REFRESH_PER_SECOND)
+
+opener = build_opener()
+opener.addheaders = [('User-Agent',
+                      (
+                          'Mozilla/5.0 (Windows NT 6.1; WOW64)'
+                          'AppleWebKit/537.36 (KHTML, like Gecko)'
+                          'Chrome/36.0.1941.0 Safari/537.36'
+                      ))]
+install_opener(opener)
 
 
 def encode(data: str) -> str:

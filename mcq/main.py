@@ -1,20 +1,28 @@
 from argparse import ArgumentParser
 from pathlib import Path
+from shutil import rmtree
 
 from .get import get, source_types
-from .output import set_verbose
+from .output import set_verbose, set_debug, debug
 from .post_processing import post_process
 from .processing import process_types, process
 
 
 curr = Path('curr')
 
-NORMAL_VALUE = 'assets/minecraft/textures/block,assets/minecraft/textures/item,assets/minecraft/textures/entity'
+NORMAL_VALUE = 'assets/minecraft/textures/blocks,assets/minecraft/textures/item,assets/minecraft/textures/entity'
 
 
 def main():
     args = parse_args()
     set_verbose(args.verbose)
+    set_debug(args.debug)
+    if args.force:
+        try:
+            rmtree(curr)
+            print('Deleted `curr`')
+        except FileNotFoundError:
+            debug('`rmtree(curr)` raised `FileNotFoundError`, passing')
     print('Collecting resource pack...')
     get(args.source_type, args.source_value, curr)
     print('Collected resource pack')
@@ -57,6 +65,8 @@ def parse_args():
         action='store_true',
         help='Put even more really useless spammy stuff on the screen'
     )
+
+    parser.add_argument('-f', '--force', action='store_true', help='Delete `curr` if it exists')
 
     return parser.parse_args()
 
