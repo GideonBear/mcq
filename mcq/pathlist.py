@@ -17,21 +17,27 @@ def create_pathlist(whitelist: List[PathLike], blacklist: List[PathLike]):
         PathBlacklist(lst)
 
 
-class _PathList(ABC):
+class PathList(ABC):
     def __init__(self, lst: List[Path]):
         self.list = lst
 
     @abstractmethod
-    def skip(self, path: Path) -> bool:
+    def skip(self, path: Path, extra_value: bool) -> bool:
         ...
 
 
-class PathWhitelist(_PathList):
-    def skip(self, path: Path) -> bool:
-        if path in self.list:
-            return False
+class PathWhitelist(PathList):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        [self.list.extend(p.parents[:-1]) for p in self.list.copy()]
+
+    def skip(self, path: Path, whitelisted: bool) -> bool:
+        if path.is_dir():
+            return path not in self.list
+        else:
+            return whitelisted
 
 
-class PathBlacklist(_PathList):
-    def skip(self, path: Path) -> bool:
+class PathBlacklist(PathList):
+    def skip(self, path: Path, _: bool) -> bool:
         return path in self.list

@@ -5,7 +5,7 @@ from typing import List, Optional, Tuple
 from PIL import Image
 
 from .output import log, fatal, debug
-from .pathlist import create_pathlist
+from .pathlist import create_pathlist, PathList
 
 
 def process(
@@ -17,7 +17,7 @@ def process(
 ):
     path = path.resolve()
 
-    whitelist, lst = create_pathlist(whitelist, blacklist)
+    lst = create_pathlist(whitelist, blacklist)
 
     assert process_type in process_type
     func, need_value, do_dirs = process_types[process_type]
@@ -26,41 +26,20 @@ def process(
     elif (not need_value) and process_value is not None:
         fatal('Specified process_value is not accepted for this process')
 
-    process_rec(path, func, process_value, whitelist, lst, do_dirs)
+    process_rec(path, func, process_value, lst, do_dirs, False)
 
 
-def get_lst(path: Path, whitelist: List[PathLike], blacklist: List[PathLike]) -> Tuple[bool, List[Path]]:
-
-    if use_whitelist:
-        [lst.extend(p.parents[:-1]) for p in lst.copy()]
-
-    lst = list(map(lambda x: (path / x).resolve(), lst))
-
-    debug(lst)
-    return use_whitelist, lst
-
-
-def process_rec(path: Path, func, value: int, whitelist: bool, lst: List[Path], do_dirs: bool):
+def process_rec(path: Path, func, value: int, lst: PathList, do_dirs: bool, whitelisted: bool):
     for p in path.iterdir():
-        if skip(p, whitelist, lst):
+        if lst.skip(p, whitelisted):
             log(f'Skipping {p}')
+            continue
         elif p.is_dir():
-            process_rec(p, func, value, whitelist, lst, do_dirs=do_dirs)
+            process_rec(p, func, value, lst, do_dirs, True)
             if do_dirs:
                 func(p, value)
         else:
-            func(p, value)
-
-
-def skip(path: Path, whitelist: bool, lst: List[Path]):
-    assert path == path.resolve()
-    debug(f'`skip` called with {whitelist=}, {path=}')
-
-    if whitelist:
-        for p in path.parents:
-            if p in lst:
-                return False
-        return True
+            func(path / p, value)
 
 
 def resize_div(path: Path, value: int):
